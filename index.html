@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Santuario Marino BCS: Hábitats &amp; Minijuego</title>
+    <title>Santuario Marino BCS: Hábitats, Extinciones, Apps &amp; Foro</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="status-critico">
@@ -11,162 +11,309 @@
 <div class="journal-container" id="appContainer">
     <header>
         <h1>Santuario Marino de Baja California Sur</h1>
-        <p class="subtitle">Ilustración de Hábitats, Fichas de Concienciación &amp; Minijuego Interactivo</p>
+        <p class="subtitle">Hábitats, Conservación, Especies Extintas, Apps Amigas &amp; Foro</p>
     </header>
 
-    <div class="threat-banner" id="threatBanner">
-        Cargando estado de la especie...
+    <!-- Pestañas de Navegación -->
+    <div class="nav-tabs">
+        <button class="nav-tab-btn active" onclick="switchTab('actual', event)">🌊 Santuario Actual</button>
+        <button class="nav-tab-btn" onclick="switchTab('extintas', event)">📜 Especies Extintas</button>
+        <button class="nav-tab-btn" onclick="switchTab('apps', event)">🌐 Apps Amigas</button>
+        <button class="nav-tab-btn" onclick="switchTab('foro', event)">💬 Foro / Comunidad</button>
     </div>
 
-    <!-- RECUADRO: Representación del Animal en su Hábitat Natural -->
-    <div class="habitat-illustration-box">
-        <div class="habitat-art-viewport" id="habitatArtViewport">
-            <!-- Representación en formato vectorial SVG según la especie activa -->
+    <!-- PESTAÑA 1: SANTUARIO ACTUAL -->
+    <div id="tab-actual" class="tab-content active">
+        <div class="threat-banner" id="threatBanner" style="grid-column: 1 / -1;">
+            Cargando estado de la especie...
         </div>
-        <div class="habitat-description">
-            <h3 id="habitatBoxTitle">Representación del Hábitat</h3>
-            <p id="habitatBoxDesc">Cargando detalles del ecosistema de la especie...</p>
-            <span class="habitat-tag" id="habitatBoxLocation">Ubicación: Golfo de California</span>
+
+        <!-- Controles de Iluminación del Tanque -->
+        <div class="lighting-controls">
+            <span>☀️ Iluminación del Tanque:</span>
+            <button class="lighting-btn active" onclick="setLighting('amanecer', this)">🌅 Amanecer Dorado</button>
+            <button class="lighting-btn" onclick="setLighting('mediodia', this)">🌊 Mediodía Cristalino</button>
+            <button class="lighting-btn" onclick="setLighting('atardecer', this)">🌇 Atardecer Naranja</button>
+            <button class="lighting-btn" onclick="setLighting('noche', this)">🌙 Noche Profunda</button>
+        </div>
+
+        <!-- RECUADRO: Ilustración del Hábitat Natural -->
+        <div class="habitat-illustration-box">
+            <div class="habitat-art-viewport" id="habitatArtViewport"></div>
+            <div class="habitat-description">
+                <h3 id="habitatBoxTitle">Representación del Hábitat</h3>
+                <p id="habitatBoxDesc">Cargando detalles del ecosistema de la especie...</p>
+                <span class="habitat-tag" id="habitatBoxLocation">Ubicación: Golfo de California</span>
+            </div>
+        </div>
+
+        <!-- Área del Tanque / Minijuego de Alimentación -->
+        <div class="art-frame" id="artFrame" style="background: linear-gradient(180deg, #f2cfad 0%, #73a9ad 65%, #3d6061 100%);">
+            <div class="habitat-badge" id="habitat-text">Tanque Interactivo</div>
+            <canvas id="seaCanvas"></canvas>
+            <div class="game-hint">🖱️ Minijuego: Clic en comida para alimentar | Clic en residuos para limpiar</div>
+            <div id="overlayMsg" class="overlay-msg"></div>
+        </div>
+
+        <!-- Panel de Control y Estado -->
+        <div class="sidebar">
+            <!-- Selector de Especie -->
+            <div class="species-selector">
+                <button class="selector-btn active" onclick="switchSpecies('vaquita')">
+                    <svg viewBox="0 0 100 60">
+                        <ellipse cx="50" cy="30" rx="35" ry="18" fill="#7a8b99" />
+                        <path d="M 20 30 L 5 18 L 12 30 L 5 42 Z" fill="#7a8b99" />
+                        <path d="M 45 12 Q 50 0 62 14 Z" fill="#7a8b99" />
+                        <circle cx="70" cy="28" r="4" fill="#2c2825" />
+                    </svg>
+                    Vaquita
+                </button>
+
+                <button class="selector-btn" onclick="switchSpecies('totoaba')">
+                    <svg viewBox="0 0 100 60">
+                        <ellipse cx="50" cy="30" rx="40" ry="16" fill="#8c8d8f" />
+                        <polygon points="90,30 75,18 75,42" fill="#8c8d8f" />
+                        <path d="M 45 14 Q 50 2 60 16 Z" fill="#d8b26e" />
+                        <circle cx="30" cy="26" r="3" fill="#2c2825" />
+                    </svg>
+                    Totoaba
+                </button>
+
+                <button class="selector-btn" onclick="switchSpecies('golfina')">
+                    <svg viewBox="0 0 100 60">
+                        <ellipse cx="50" cy="30" rx="25" ry="20" fill="#5b8c5a" />
+                        <circle cx="75" cy="28" r="8" fill="#5b8c5a" />
+                        <path d="M 60 12 Q 75 -5 50 10 Z" fill="#5b8c5a" />
+                        <path d="M 60 48 Q 75 65 50 50 Z" fill="#5b8c5a" />
+                    </svg>
+                    Golfina
+                </button>
+
+                <button class="selector-btn" onclick="switchSpecies('tiburon')">
+                    <svg viewBox="0 0 100 60">
+                        <ellipse cx="50" cy="30" rx="42" ry="16" fill="#3d5a80" />
+                        <polygon points="92,30 75,18 75,42" fill="#3d5a80" />
+                        <circle cx="30" cy="26" r="1.5" fill="#fff" />
+                        <circle cx="45" cy="32" r="1.5" fill="#fff" />
+                        <circle cx="60" cy="28" r="1.5" fill="#fff" />
+                    </svg>
+                    T. Ballena
+                </button>
+
+                <button class="selector-btn" onclick="switchSpecies('leon')">
+                    <svg viewBox="0 0 100 60">
+                        <ellipse cx="45" cy="32" rx="30" ry="18" fill="#7c5c43" />
+                        <circle cx="70" cy="22" r="12" fill="#7c5c43" />
+                        <ellipse cx="80" cy="24" rx="6" ry="4" fill="#5a402d" />
+                        <path d="M 35 32 Q 25 55 10 45 Z" fill="#7c5c43" />
+                    </svg>
+                    L. Marino
+                </button>
+            </div>
+
+            <!-- Indicadores Vitales -->
+            <div class="status-card">
+                <h3 id="species-name">Vaquita Marina</h3>
+                
+                <div class="metric">
+                    <div class="metric-header">
+                        <span>Nutrición (Dieta)</span>
+                        <span id="food-val">60%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div id="food-bar" class="bar-fill" style="width: 60%; background: var(--sand-yellow);"></div>
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-header">
+                        <span>Limpieza del Hábitat</span>
+                        <span id="habitat-val">50%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div id="habitat-bar" class="bar-fill" style="width: 50%; background: var(--sea-cyan);"></div>
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-header">
+                        <span>Seguridad del Entorno</span>
+                        <span id="safety-val">70%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div id="safety-bar" class="bar-fill" style="width: 70%; background: var(--coral-red);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones del Minijuego -->
+            <div class="actions-grid" style="grid-template-columns: 1fr 1fr;">
+                <button class="action-btn" onclick="spawnFoodBatch()">
+                    <span id="feed-icon">🐟</span> Soltar Comida
+                </button>
+                <button class="action-btn" onclick="cleanAllDebris()">
+                    🧹 Limpiar Redes/Basura
+                </button>
+                <button class="action-btn" id="sleepBtn" onclick="toggleSleep()" style="grid-column: 1 / -1; background: #f3e8ff; border-color: #9333ea; color: #7e22ce;">
+                    💤 Hacer Dormir / Despertar
+                </button>
+            </div>
+
+            <!-- Ficha de Bitácora Educativa -->
+            <div class="notebook-entry">
+                <h4 id="lore-title">Dieta y Amenazas</h4>
+                <p id="lore-body">Cargando datos de la especie...</p>
+            </div>
+        </div>
+
+        <!-- Ficha Completa de Características y Cuidados -->
+        <div class="info-section">
+            <div class="info-header">
+                <h2 id="info-species-title">Ficha de Conservación</h2>
+            </div>
+            <div class="info-grid">
+                <div class="info-box">
+                    <h3>📋 Características Biológicas &amp; Dieta</h3>
+                    <ul id="info-traits">
+                        <li>Cargando características...</li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <h3>🌿 Cuidados &amp; Amenazas Principales</h3>
+                    <ul id="info-cares">
+                        <li>Cargando programa de conservación...</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Área del Tanque / Canvas del Minijuego -->
-    <div class="art-frame" id="artFrame">
-        <div class="habitat-badge" id="habitat-text">Tanque Interactivo</div>
-        <canvas id="seaCanvas"></canvas>
-        <div class="game-hint">🖱️ Minijuego: Clic en la comida para alimentar | Clic en los residuos para limpiar</div>
-        <div id="overlayMsg" class="overlay-msg"></div>
-    </div>
-
-    <!-- Panel de Control y Estado -->
-    <div class="sidebar">
-        <!-- Selector de Especie -->
-        <div class="species-selector">
-            <button class="selector-btn active" onclick="switchSpecies('vaquita')">
-                <svg viewBox="0 0 100 60">
-                    <ellipse cx="50" cy="30" rx="35" ry="18" fill="#7a8b99" />
-                    <path d="M 20 30 L 5 18 L 12 30 L 5 42 Z" fill="#7a8b99" />
-                    <path d="M 45 12 Q 50 0 62 14 Z" fill="#7a8b99" />
-                    <circle cx="70" cy="28" r="4" fill="#2c2825" />
-                </svg>
-                Vaquita
-            </button>
-
-            <button class="selector-btn" onclick="switchSpecies('totoaba')">
-                <svg viewBox="0 0 100 60">
-                    <ellipse cx="50" cy="30" rx="40" ry="16" fill="#8c8d8f" />
-                    <polygon points="90,30 75,18 75,42" fill="#8c8d8f" />
-                    <path d="M 45 14 Q 50 2 60 16 Z" fill="#d8b26e" />
-                    <circle cx="30" cy="26" r="3" fill="#2c2825" />
-                </svg>
-                Totoaba
-            </button>
-
-            <button class="selector-btn" onclick="switchSpecies('golfina')">
-                <svg viewBox="0 0 100 60">
-                    <ellipse cx="50" cy="30" rx="25" ry="20" fill="#5b8c5a" />
-                    <circle cx="75" cy="28" r="8" fill="#5b8c5a" />
-                    <path d="M 60 12 Q 75 -5 50 10 Z" fill="#5b8c5a" />
-                    <path d="M 60 48 Q 75 65 50 50 Z" fill="#5b8c5a" />
-                </svg>
-                Golfina
-            </button>
-
-            <button class="selector-btn" onclick="switchSpecies('tiburon')">
-                <svg viewBox="0 0 100 60">
-                    <ellipse cx="50" cy="30" rx="42" ry="16" fill="#3d5a80" />
-                    <polygon points="92,30 75,18 75,42" fill="#3d5a80" />
-                    <circle cx="30" cy="26" r="1.5" fill="#fff" />
-                    <circle cx="45" cy="32" r="1.5" fill="#fff" />
-                    <circle cx="60" cy="28" r="1.5" fill="#fff" />
-                </svg>
-                T. Ballena
-            </button>
-
-            <button class="selector-btn" onclick="switchSpecies('leon')">
-                <svg viewBox="0 0 100 60">
-                    <ellipse cx="45" cy="32" rx="30" ry="18" fill="#7c5c43" />
-                    <circle cx="70" cy="22" r="12" fill="#7c5c43" />
-                    <ellipse cx="80" cy="24" rx="6" ry="4" fill="#5a402d" />
-                    <path d="M 35 32 Q 25 55 10 45 Z" fill="#7c5c43" />
-                </svg>
-                L. Marino
-            </button>
-        </div>
-
-        <!-- Indicadores Vitales -->
-        <div class="status-card">
-            <h3 id="species-name">Vaquita Marina</h3>
-            
-            <div class="metric">
-                <div class="metric-header">
-                    <span>Nutrición (Dieta)</span>
-                    <span id="food-val">60%</span>
-                </div>
-                <div class="bar-bg">
-                    <div id="food-bar" class="bar-fill" style="width: 60%; background: var(--sand-yellow);"></div>
-                </div>
+    <!-- PESTAÑA 2: ESPECIES EXTINTAS -->
+    <div id="tab-extintas" class="tab-content full-width">
+        <div class="extinct-container">
+            <div class="extinct-sidebar">
+                <button class="extinct-btn active" onclick="switchExtinct('steller', event)">
+                    <span>🌊 Vaca Marina de Steller</span>
+                    <span>💀 Extinta</span>
+                </button>
+                <button class="extinct-btn" onclick="switchExtinct('megalodon', event)">
+                    <span>🦈 Tiburón Megalodón</span>
+                    <span>💀 Extinto</span>
+                </button>
+                <button class="extinct-btn" onclick="switchExtinct('monje', event)">
+                    <span>🦭 Foca Monje del Caribe</span>
+                    <span>💀 Extinta</span>
+                </button>
+                <button class="extinct-btn" onclick="switchExtinct('alca', event)">
+                    <span>🐧 Alca Gigante</span>
+                    <span>💀 Extinta</span>
+                </button>
+                <button class="extinct-btn" onclick="switchExtinct('baiji', event)">
+                    <span>🐬 Delfín Baiji</span>
+                    <span>💀 Extinto</span>
+                </button>
             </div>
 
-            <div class="metric">
-                <div class="metric-header">
-                    <span>Limpieza del Hábitat</span>
-                    <span id="habitat-val">50%</span>
+            <div class="extinct-details">
+                <h2 id="extinct-title">Vaca Marina de Steller (Hydrodamalis gigas)</h2>
+                <div class="extinct-meta" id="extinct-meta">
+                    🗓️ Año de Extinción: 1768 (Menos de 27 años después de su descubrimiento científico)
                 </div>
-                <div class="bar-bg">
-                    <div id="habitat-bar" class="bar-fill" style="width: 50%; background: var(--sea-cyan);"></div>
+                <p id="extinct-desc" style="font-size: 0.9rem; line-height: 1.5; color: #444; margin-bottom: 15px;">
+                    Cargando descripción de la especie extinta...
+                </p>
+
+                <div class="extinct-grid">
+                    <div class="extinct-card">
+                        <h3>🌿 Hábitat Histórico</h3>
+                        <p id="extinct-habitat">Cargando hábitat...</p>
+                    </div>
+                    <div class="extinct-card">
+                        <h3>🍽️ Dieta y Alimentación</h3>
+                        <p id="extinct-diet">Cargando dieta...</p>
+                    </div>
+                    <div class="extinct-card" style="grid-column: 1 / -1;">
+                        <h3>⚠️ Causas Exactas de su Extinción</h3>
+                        <p id="extinct-causes">Cargando causas...</p>
+                    </div>
                 </div>
             </div>
-
-            <div class="metric">
-                <div class="metric-header">
-                    <span>Seguridad del Entorno</span>
-                    <span id="safety-val">70%</span>
-                </div>
-                <div class="bar-bg">
-                    <div id="safety-bar" class="bar-fill" style="width: 70%; background: var(--coral-red);"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Acciones del Minijuego -->
-        <div class="actions-grid">
-            <button class="action-btn" onclick="spawnFoodBatch()">
-                <span id="feed-icon">🐟</span> Soltar Comida
-            </button>
-            <button class="action-btn" onclick="cleanAllDebris()">
-                🧹 Limpiar Redes/Basura
-            </button>
-            <button class="action-btn" onclick="careAction('protect')" style="grid-column: 1 / -1;">
-                🛡️ Activar Patrulla de Protección
-            </button>
-        </div>
-
-        <!-- Ficha de Bitácora Educativa -->
-        <div class="notebook-entry">
-            <h4 id="lore-title">Dieta y Amenazas</h4>
-            <p id="lore-body">Cargando datos de la especie...</p>
         </div>
     </div>
 
-    <!-- Ficha Completa de Características y Cuidados -->
-    <div class="info-section">
-        <div class="info-header">
-            <h2 id="info-species-title">Ficha de Conservación</h2>
+    <!-- PESTAÑA 3: APPS AMIGAS -->
+    <div id="tab-apps" class="tab-content full-width">
+        <div class="forum-wrapper">
+            <div class="forum-header">
+                <h2>🌐 Aplicaciones y Plataformas de Conservación Marina</h2>
+                <p>Explora otras herramientas tecnológicas y aplicaciones móviles del mundo que inspiran, educan y movilizan a la sociedad en favor de los océanos y la Agenda 2030.</p>
+            </div>
+
+            <div class="apps-grid">
+                <div class="app-card">
+                    <h3>🌊 Marine Debris Tracker</h3>
+                    <p>Aplicación ciudadana global respaldada por NOAA y la Universidad de Georgia. Permite registrar y rastrear basura marina y plásticos en playas y vías fluviales.</p>
+                    <a href="https://marinedebris.noaa.gov/" target="_blank" class="app-link-btn">Visitar Sitio / App</a>
+                </div>
+
+                <div class="app-card">
+                    <h3>🐠 Seafood Watch (Monterey Bay Aquarium)</h3>
+                    <p>Herramienta para identificar qué pescados y mariscos provienen de pesquerías sostenibles y cuáles deben evitarse.</p>
+                    <a href="https://www.seafoodwatch.org/" target="_blank" class="app-link-btn">Conocer Seafood Watch</a>
+                </div>
+
+                <div class="app-card">
+                    <h3>🐋 Whale Alert</h3>
+                    <p>Aplicación diseñada para prevenir colisiones entre grandes embarcaciones comerciales y ballenas en peligro de extinción.</p>
+                    <a href="https://www.whalealert.org/" target="_blank" class="app-link-btn">Explorar Whale Alert</a>
+                </div>
+
+                <div class="app-card">
+                    <h3>🦈 Sharktivity</h3>
+                    <p>Plataforma interactiva de ciencia ciudadana enfocada en el monitoreo e investigación sobre tiburones.</p>
+                    <a href="https://www.sharktivity.app/" target="_blank" class="app-link-btn">Descubrir Sharktivity</a>
+                </div>
+
+                <div class="app-card">
+                    <h3>🐙 iNaturalist (Mundo Marino)</h3>
+                    <p>Red social de ciencia ciudadana impulsada por National Geographic para catalogar especies marinas locales.</p>
+                    <a href="https://www.inaturalist.org/" target="_blank" class="app-link-btn">Explorar iNaturalist</a>
+                </div>
+
+                <div class="app-card">
+                    <h3>🌱 ODS 14 Tracker (Agenda 2030)</h3>
+                    <p>Herramientas de seguimiento para el desarrollo sostenible de los océanos y recursos marinos impulsadas por el PNUD.</p>
+                    <a href="https://sdgs.un.org/goals/goal14" target="_blank" class="app-link-btn">Ver Metas ONU ODS 14</a>
+                </div>
+            </div>
         </div>
-        <div class="info-grid">
-            <div class="info-box">
-                <h3>📋 Características Biológicas &amp; Dieta</h3>
-                <ul id="info-traits">
-                    <li>Cargando características...</li>
-                </ul>
+    </div>
+
+    <!-- PESTAÑA 4: FORO / COMUNIDAD -->
+    <div id="tab-foro" class="tab-content full-width">
+        <div class="forum-wrapper">
+            <div class="forum-header">
+                <h2>💬 Foro de Diálogo y Conservación Marina</h2>
+                <p>Comparte tus reflexiones, discute sobre el cuidado de los océanos y conversa con otros defensores del medio ambiente marino.</p>
             </div>
-            <div class="info-box">
-                <h3>🌿 Cuidados &amp; Amenazas Principales</h3>
-                <ul id="info-cares">
-                    <li>Cargando programa de conservación...</li>
-                </ul>
+
+            <!-- Formulario para Nuevo Comentario -->
+            <div class="comment-form">
+                <form id="commentForm" onsubmit="handleCommentSubmit(event)">
+                    <div class="form-group">
+                        <label for="authorName">Tu Nombre o Alias:</label>
+                        <input type="text" id="authorName" placeholder="Ej. Biólogo Marino / Defensor del Mar" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="commentText">Mensaje o Pregunta sobre Conservación:</label>
+                        <textarea id="commentText" placeholder="Escribe aquí tu opinión sobre la protección de las especies de BCS..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-comment-btn">📤 Publicar Comentario</button>
+                </form>
             </div>
+
+            <!-- Listado de Comentarios -->
+            <div class="comments-list" id="commentsList"></div>
         </div>
     </div>
 </div>
